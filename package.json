@@ -1,0 +1,25 @@
+{
+  "name": "nkzawa",
+  "version": "0.0.1",
+  "description": "Redis adapter for upcoming Socket.IO 1.0",
+  "scripts": {
+    "test": "node_modules/.bin/mocha --reporter dot"
+  },
+  "keywords": [
+    "socket.io",
+    "redis",
+    "adapter"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "redis": "~0.10.0"
+  },
+  "devDependencies": {
+    "socket.io": "git://github.com/LearnBoost/socket.io",
+    "socket.io-client": "git://github.com/LearnBoost/socket.io-client",
+    "mocha": "~1.17.1",
+    "chai": "~1.9.0",
+    "async": "~0.2.10"
+  }
+}
