@@ -19,9 +19,9 @@ function RedisAdapter(nsp) {
 
   Adapter.call(this, nsp);
 
-  this.pack = JSON.stringify;
-  this.unpack = JSON.parse;
+  // TODO: enable to change how to pack/unpack messages by options.
 
+  // TODO: enable to set clients by options.
   this.pub = redis.createClient();
   this.sub = redis.createClient();
 
@@ -36,6 +36,10 @@ function RedisAdapter(nsp) {
     broadcast.call(self, packet, opts);
   });
 }
+
+RedisAdapter.prototype.pack = JSON.stringify;
+
+RedisAdapter.prototype.unpack = JSON.parse;
 
 RedisAdapter.prototype.publish = function(name) {
   var args = slice.call(arguments, 1);
