@@ -27,8 +27,7 @@ describe('socket.io-redis-adapter', function() {
       client.on('message', function(channel, message) {
         message = adapter.unpack(message);
         expect(channel).to.equal('hi');
-        expect(message.nsp).to.equal('/nsp');
-        expect(message.args).to.eql(['foo', 'bar']);
+        expect(message).to.eql(['foo', 'bar']);
         client.quit();
         adapter.quit();
         done();
@@ -47,17 +46,11 @@ describe('socket.io-redis-adapter', function() {
         expect(Array.prototype.slice.call(arguments)).to.eql(['foo', 'bar']);
         client.quit();
         adapter.quit();
-        adapter2.quit();
         done();
       });
 
-      var adapter2 = new RedisAdapter({name: '/any'});
-      adapter2.subscribe('hi', function() {
-        throw new Error('Called unexpectedly');
-      });
-
       var client = redis.createClient();
-      client.publish('hi', adapter.pack({nsp: '/nsp', args: ['foo', 'bar']}));
+      client.publish('hi', adapter.pack(['foo', 'bar']));
     });
   });
 

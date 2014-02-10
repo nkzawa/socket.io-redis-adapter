@@ -28,25 +28,22 @@ function RedisAdapter(nsp) {
   var self = this;
 
   this.sub.on('message', function(channel, message) {
-    message = self.unpack(message);
-    if (message.nsp !== self.nsp.name) return;
-
-    self.emit.apply(self, [channel].concat(message.args));
+    var args = [channel].concat(self.unpack(message))
+    self.emit.apply(self, args);
   });
 
-  this.subscribe('broadcast', function(packet, opts) {
+  this.subscribe(nsp.name, function(packet, opts) {
     broadcast.call(self, packet, opts);
   });
 }
 
 RedisAdapter.prototype.publish = function(name) {
   var args = slice.call(arguments, 1);
-  this.pub.publish(name, this.pack({nsp: this.nsp.name, args: args}));
+  this.pub.publish(name, this.pack(args));
 };
 
 RedisAdapter.prototype.subscribe = function(name, callback) {
-  var listeners = this.listeners(name);
-  if (!listeners.length) {
+  if (!this.listeners(name).length) {
     this.sub.subscribe(name);
   }
 
@@ -60,14 +57,13 @@ RedisAdapter.prototype.unsubscribe = function(name, callback) {
     this.removeAllListeners(name);
   }
 
-  var listeners = this.listeners(name);
-  if (!listeners.length) {
+  if (!this.listeners(name).length) {
     this.sub.unsubscribe(name);
   }
 };
 
 RedisAdapter.prototype.broadcast = function(packet, opts) {
-  this.publish('broadcast', packet, opts);
+  this.publish(this.nsp.name, packet, opts);
 };
 
 RedisAdapter.prototype.quit = function() {
