@@ -26,15 +26,15 @@ describe('socket.io-redis-adapter', function() {
       var client = redis.createClient();
       client.on('message', function(channel, message) {
         message = adapter.unpack(message);
-        expect(channel).to.equal('hi');
+        expect(channel).to.equal(adapter.channel('hi'));
         expect(message).to.eql(['foo', 'bar']);
         client.quit();
         adapter.quit();
         done();
       });
-      client.subscribe('hi');
 
       var adapter = new RedisAdapter({name: '/nsp'});
+      client.subscribe(adapter.channel('hi'));
       adapter.publish('hi', 'foo', 'bar');
     });
   });
@@ -50,7 +50,26 @@ describe('socket.io-redis-adapter', function() {
       });
 
       var client = redis.createClient();
-      client.publish('hi', adapter.pack(['foo', 'bar']));
+      client.publish(adapter.channel('hi'), adapter.pack(['foo', 'bar']));
+    });
+  });
+
+  describe('channel', function() {
+    it('should create a channel name', function() {
+      var adapter = new RedisAdapter({name: '/nsp'});
+      expect(adapter.channel('hi')).to.equal('socket.io/nsp/hi');
+    });
+  });
+
+  describe('extractEvent', function() {
+    it('should extract a event name', function() {
+      var adapter = new RedisAdapter({name: '/nsp'});
+      expect(adapter.extractEvent('socket.io/nsp/hi')).to.equal('hi');
+    });
+
+    it('should be empty for an invalid channel', function() {
+      var adapter = new RedisAdapter({name: '/nsp'});
+      expect(adapter.extractEvent('hi')).to.be.empty;
     });
   });
 
