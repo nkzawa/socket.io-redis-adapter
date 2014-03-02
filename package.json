@@ -1,5 +1,5 @@
 {
-  "name": "nkzawa",
+  "name": "socket.io-redis-adapter",
   "version": "0.0.1",
   "description": "Redis adapter for upcoming Socket.IO 1.0",
   "scripts": {
@@ -10,8 +10,12 @@
     "redis",
     "adapter"
   ],
-  "author": "",
+  "author": "Naoyuki Kanezawa <naoyuki.kanezawa@gmail.com>",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/nkzawa/socket.io-redis-adapter.git"
+  },
   "dependencies": {
     "redis": "~0.10.0"
   },
